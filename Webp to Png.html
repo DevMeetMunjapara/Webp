@@ -1,0 +1,229 @@
+<style>
+    body {
+
+        align-items: center;
+    }
+
+    .convert {
+        position: relative;
+        margin-top: 50px;
+        text-align: center;
+    }
+
+    #userImage {
+        height: 100px;
+        background-color: blueviolet;
+        border-radius: 10px;
+        cursor: pointer;
+        opacity: 0;
+    }
+
+    .mask {
+        position: absolute;
+        top: 58px;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 100px;
+        width: 255px;
+        background-color: rgb(200, 200, 200);
+        border-radius: 10px;
+        z-index: -1;
+    }
+
+    .mask h4 {
+        margin-top: 38px;
+        font-size: 20px;
+
+    }
+
+    .images {
+        display: flex;
+        flex-wrap: wrap;
+        text-align: center;
+        margin-top: 20px;
+        margin-left: auto;
+    }
+
+    .images div {
+        width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    img {
+        width: 100%;
+    }
+
+    #custom-button {
+        padding: 10px;
+        color: white;
+        background: linear-gradient(to right, #16dadd, #d8fd8f);
+        border: 1px solid #000;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #custom-button:hover {
+        background-color: #00b28f;
+    }
+
+    #custom-text {
+        margin-left: 10px;
+        font-family: sans-serif;
+        color: #aaa;
+    }
+
+    .box1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+
+    }
+
+    input[type="file"] {
+        opacity: 0;
+        /* make transparent */
+        z-index: -1;
+        /* move under anything else */
+        position: absolute;
+        /* don't let it take up space */
+    }
+
+    .links{
+        padding: 16px;
+    text-align: center;
+    margin-top: 20px;
+    }
+
+
+    .a {
+        text-decoration: none;
+        text-align: center;
+        color: black;
+        background: #f0f0f0;
+
+        box-shadow: 2px 17px 20px #b9b9b9;
+        border: 1px solid;
+        border-radius: 5px;
+        padding: 7px;
+        font-family: cursive;
+    }
+
+    #a3{
+        background: rgb(79, 231, 219);
+    }
+   
+</style>
+
+
+<div class="links">
+
+    <b><a href="#" class="a" id="a1">Only open webp</a></b>
+    <b><a href="#" class="a" id="a2">Webp To Jpg</a></b>
+    <b><a href="#" class="a" id="a3">Webp To Png</a></b>
+    <b><a href="#" class="a" id="a4">Webp To Gif</a></b>
+</div>
+
+<div class="box1">
+    <button id="custom-button">
+        <input type="file" draggable="false" accept="image/*" name="convert" id="real-file" multiple=""
+            onchange="convertImage(event,this)">
+        <label for="real-file" style="padding: 48px;
+        cursor: pointer;font-size: 30px; color: black">Upload Webp file</label>
+    </button>
+</div>
+
+
+<div class="images">
+    <div>
+        <h2>Your Original Image </h2>
+        <img src="" id="Uimage">
+    </div>
+    <div>
+        <h2>PNG image</h2>
+        <img src="" id="Wimage">
+    </div>
+
+</div>
+<br><br>
+
+<div style="text-align: center;">
+    <b>
+        <p id="p"></p>
+    </b>
+    <br><br>
+    <a id="a"></a>
+</div>
+
+
+
+<script>
+    const Uimage = document.querySelector("#Uimage");
+    const Wimage = document.querySelector("#Wimage");
+
+    function convertImage(event, fileInput) {
+
+        if (event.target.files.length > 0) {
+            //Show User Image
+            let src = URL.createObjectURL(event.target.files[0]);
+            Uimage.src = src;
+
+            //Convert User Image To Canvas 
+            let canvas = document.createElement('canvas');
+            let ctx = canvas.getContext("2d");
+
+            let userImage = new Image();
+            userImage.src = src;
+
+
+            userImage.onload = function () {
+                canvas.width = userImage.width;
+                canvas.height = userImage.height;
+                ctx.drawImage(userImage, 0, 0);
+
+                //convert canvas to webp
+                let webpImage = canvas.toDataURL("image/jpeg", 1)
+                Wimage.src = webpImage;
+
+
+                let files = fileInput.files;
+                textContent = "";
+
+                for (let i = 0; i < files.length; i++) {
+                    textContent += `${files[i].name}`;
+                    let name = files[i].name;
+                }
+
+
+                let str = textContent;
+
+                let index = str.indexOf(".")
+
+                let img_name = str.slice(str, index);
+
+
+                let p = document.getElementById("p");
+                p.innerHTML = "Successfully Convert "
+                p.style = "font-size: 27px;color: rgb(0 8 254); ";
+
+
+
+                let a = document.getElementById("a");
+                a.href = canvas.toDataURL();
+                a.innerHTML = "Download Jpeg File";
+                a.download = `${img_name}.png`;
+
+                a.style = "border-radius: 5px;text-decoration: none;font-size: 32px;border: 1px solid black;margin: 8px;padding: 18px;background: linear-gradient(to right, #16dadd, #d8fd8f);color: black"
+
+
+
+            }
+
+
+        }
+    }
+
+
+
+</script>
